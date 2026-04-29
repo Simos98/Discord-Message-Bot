@@ -8,7 +8,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-ADMIN_IDS = {int(os.getenv('ADMIN_USER_ID')): 'AdminName'} # Load admin user IDs from .env
+#ADMIN_IDS = {int(os.getenv('ADMIN_USER_ID'))} # Load admin user IDs from .env
+
+admin_id_str = os.getenv("ADMIN_USER_ID")
+if not admin_id_str:
+    raise RuntimeError("ADMIN_USER_ID is missing in .env")
+ADMIN_IDS = {int(admin_id_str)}
+
 SUBSCRIBER_FILE = Path('subscribers.json')
 
 # Both functions assist in remembering who is subscribed to the broadcast messages across bot restarts.
@@ -59,3 +65,8 @@ async def broadcast(interaction: discord.Interaction, message: str):
         except (discord.Forbidden, discord.HTTPException):
             failed += 1
     await interaction.followup.send(f"Sent to {sent}, failed {failed}.", ephemeral=True)
+
+if __name__ == "__main__":
+    if not TOKEN:
+        print("Error: DISCORD_TOKEN not found in .env file.")
+    bot.run(TOKEN)
