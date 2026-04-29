@@ -1,0 +1,14 @@
+services:
+  bot:
+    build: .
+    container_name: discord-broadcast-bot
+    restart: unless-stopped
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      ADMIN_USER_ID: ${ADMIN_USER_ID}
+      DATA_DIR: /data
+    volumes:
+      - bot_data:/data
+
+volumes:
+  bot_data:
